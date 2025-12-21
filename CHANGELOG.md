@@ -1,3 +1,4 @@
 - [ ] extract libraries
+- [ ] project structure
 - [ ] shell
 - [x] build script

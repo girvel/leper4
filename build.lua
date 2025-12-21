@@ -1,35 +1,10 @@
 #!/usr/bin/env luajit
+require("lib.string")
+
 
 ----------------------------------------------------------------------------------------------------
 -- [SECTION] Tools
 ----------------------------------------------------------------------------------------------------
-
---- @param str string
---- @param pat string
---- @param plain boolean?
---- @return string[]
-local split = function(str, pat, plain)
-  local t = {}
-
-  while true do
-    local pos1, pos2 = str:find(pat, 1, plain or false)
-
-    if not pos1 or pos1 > pos2 then
-      t[#t + 1] = str
-      return t
-    end
-
-    t[#t + 1] = str:sub(1, pos1 - 1)
-    str = str:sub(pos2 + 1)
-  end
-end
-
---- @param str string
---- @param postfix string
---- @return boolean
-local ends_with = function(str, postfix)
-  return str:sub(-#postfix, -1) == postfix
-end
 
 --- @alias log_f fun(fmt: string, ...: any)
 --- @class log
@@ -89,15 +64,20 @@ end
 
 cmd("mkdir -p .build")
 cmd("rm -rf .build/*")
+
 cmd("make -C LuaJIT -j$(nproc)")
 cmd("make -C LuaJIT install DESTDIR=$PWD/.build PREFIX=/usr")
-for _, folder in ipairs(split("bin,lib64,lib/x86_64-linux-gnu,proc,sys,os,usr/share,usr/lib", ",")) do
+
+local dirs = "bin,lib64,lib/x86_64-linux-gnu,proc,sys,os,usr/share,usr/lib"
+for _, folder in ipairs(dirs:split(",")) do
   cmd("mkdir -p .build/initramfs/%s", folder)
 end
+
 cmd("cc -static -o .build/initramfs/init init.c")
 cmd("cp .build/usr/bin/luajit-* .build/initramfs/bin/luajit")
 cmd("cp -r .build/usr/share/luajit-* .build/initramfs/usr/share")
 cmd("cp main.lua .build/initramfs/os/")
+cmd("cp -r lib .build/initramfs/os/")
 cmd("cp /lib64/ld-linux-x86-64.so.2 .build/initramfs/lib64/")
 cmd("cp -t .build/initramfs/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/libm.so.6")
 cmd("cp -t .build/initramfs/lib/x86_64-linux-gnu /lib/x86_64-linux-gnu/libgcc_s.so.1")

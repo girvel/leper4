@@ -1,4 +1,5 @@
 local ffi = require("ffi")
+require("lib.string")
 
 ffi.cdef[[
     unsigned int sleep(unsigned int seconds);
@@ -14,13 +15,22 @@ if f then
     f:close()
 end
 
-print("My Process ID is: " .. ffi.C.getpid())
+print("Process ID is: " .. ffi.C.getpid())
 print("Entering main loop...\n")
 
-local counter = 0
+local commands = {}
+
+commands.echo = function(_, ...)
+  print(...)
+end
+
 while true do
-  io.write(".")
-  io.flush()
-  counter = counter + 1
-  ffi.C.sleep(1)
+  io.write("\ngirvel@lepervm1 # ")
+  local cmd_args = io.read("*l"):strip():split("%s+")
+  local cmd = commands[cmd_args[1]]
+  if cmd then
+    cmd(unpack(cmd_args))
+  else
+    print("Unknown command", cmd_args[1])
+  end
 end
