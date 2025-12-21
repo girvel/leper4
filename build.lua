@@ -91,4 +91,5 @@ cmd [[
     -nographic \
     -append "console=ttyS0 quiet panic=1" \
     -m 512M
+    -no-reboot
 ]]
