@@ -5,9 +5,7 @@ ffi.cdef[[
     int getpid(void);
 ]]
 
-print("\n========================================")
-print("   Welcome to LeperOS (LuaJIT Powered)   ")
-print("========================================")
+print("\nLeper OS 4 (LuaJIT)")
 
 -- Read some kernel info
 local f = io.open("/proc/version", "r")
@@ -21,8 +19,8 @@ print("Entering main loop...\n")
 
 local counter = 0
 while true do
-    print("System is alive. Tick: " .. counter)
-    counter = counter + 1
-    -- Sleep for 1 second so we don't burn 100% CPU
-    ffi.C.sleep(1)
+  io.write(".")
+  io.flush()
+  counter = counter + 1
+  ffi.C.sleep(1)
 end

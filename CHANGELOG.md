@@ -1,0 +1,3 @@
+- [ ] extract libraries
+- [ ] shell
+- [x] build script
