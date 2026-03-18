@@ -5,7 +5,9 @@ require("tech.string")
 
 cmd("mkdir -p .build")
 cmd("rm -rf .build/*")
-cmd("cd initramfs; find . | cpio -o -H newc | gzip > ../.build/initramfs.gz")
+cmd("cp -r initramfs .build/")
+cmd("cc init.c -o .build/initramfs/init")
+cmd("cd .build/initramfs; find . | cpio -o -H newc | gzip > ../initramfs.gz")
 cmd [[
   qemu-system-x86_64 \
     -kernel vmlinuz \
