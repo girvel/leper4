@@ -1,4 +1,3 @@
-- [ ] extract libraries
-- [ ] project structure
-- [ ] shell
-- [x] build script
+# CHANGELOG & PLANS
+
+
