@@ -10,8 +10,6 @@ cmd [[
   qemu-system-x86_64 \
     -kernel vmlinuz \
     -initrd .build/initramfs.gz \
-    -nographic \
-    -append "console=ttyS0 quiet panic=1" \
     -m 512M \
     -no-reboot
 ]]
